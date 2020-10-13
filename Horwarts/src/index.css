@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  height: 100vh;
+  background-color: #0f1e25;
+  background-image: url(./assets//images/2.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+}
+
+@font-face {
+  font-family: 'HarryP';
+  src: local('HarryP'), url(./assets/fonts/HarryP.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'MagicSchool';
+  src: local('MagicSchool'),
+    url(./assets/fonts/MagicSchool.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'WizardWorld';
+  src: local('WizardWorld'),
+    url(./assets/fonts/WizardWorld.ttf) format('truetype');
+}

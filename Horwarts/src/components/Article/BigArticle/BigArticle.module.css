@@ -1,0 +1,19 @@
+.Article {
+  width: 600px;
+  height: 600px;
+  top: 120px;
+  left: 20%;
+  position: fixed;
+  z-index: 500;
+}
+
+.Article h1 {
+  margin: 70px auto 10px auto;
+  width: 400px;
+  text-align: center;
+}
+
+.Article p {
+  width: 350px;
+  margin: 0 auto;
+}

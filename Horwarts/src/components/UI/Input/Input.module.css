@@ -1,0 +1,19 @@
+.Input {
+  width: 300px;
+  margin: 2rem auto 1rem auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column;
+}
+
+.Input label {
+  color: #ffbd67;
+  font-family: 'WizardWorld';
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.Input input {
+  height: 20px;
+  font-family: 'HappyP';
+}

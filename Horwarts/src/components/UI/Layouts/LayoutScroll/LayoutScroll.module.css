@@ -1,0 +1,6 @@
+.LayoutScroll {
+  background-image: url(../../../../assets/images/page.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  flex-grow: 1;
+}

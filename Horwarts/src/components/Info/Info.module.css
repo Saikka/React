@@ -1,0 +1,27 @@
+.Info {
+  width: 700px;
+  height: 90%;
+  margin-left: 50px;
+  font-family: 'HarryP';
+}
+
+.Info h1 {
+  width: 100%;
+  text-align: center;
+  font-size: 60px;
+}
+
+.Info img {
+  height: 200px;
+  float: left;
+  margin-right: 2rem;
+}
+
+.Info table {
+  float: left;
+  font-size: 36px;
+}
+
+.Info table td {
+  width: 200px;
+}

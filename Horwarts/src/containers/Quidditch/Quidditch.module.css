@@ -1,0 +1,11 @@
+.Quidditch {
+  width: 100%;
+}
+
+.Quidditch h1 {
+  margin: 1rem 0 2rem 0;
+  color: #ffbd67;
+  text-align: center;
+  font-family: 'WizardWorld';
+  border-bottom: 1px solid #427e96;
+}

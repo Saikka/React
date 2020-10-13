@@ -1,0 +1,17 @@
+.Match {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  list-style: none;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+  border-bottom: 1px solid #427e96;
+}
+
+.Match li {
+  color: #ffbd67;
+  padding: 5px;
+  font-family: 'MagicSchool';
+  font-size: 36px;
+}

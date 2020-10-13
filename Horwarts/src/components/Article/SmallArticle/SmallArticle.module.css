@@ -1,0 +1,17 @@
+.Article {
+  width: 290px;
+  height: 130px;
+  background-image: url(../../../assets/images/scroll-small2.png);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.Article img {
+  width: 100%;
+}
+
+.Article h1 {
+  font-size: 14px;
+  text-align: center;
+  font-family: 'WizardWorld';
+}

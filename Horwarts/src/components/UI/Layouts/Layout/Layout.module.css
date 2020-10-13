@@ -1,0 +1,8 @@
+.Layout {
+  width: 800px;
+  background-color: #0f1e25;
+  margin: 0 auto;
+  opacity: 0.9;
+  box-sizing: border-box;
+  flex-grow: 1;
+}
