@@ -1,0 +1,21 @@
+.MatchForm {
+  width: 400px;
+  margin: 20px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.MatchForm div {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.MatchForm select {
+  width: 200px;
+}
+
+.MatchForm input {
+  width: 100px;
+}

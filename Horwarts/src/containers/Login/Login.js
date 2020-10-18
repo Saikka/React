@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import classes from './Login.module.css';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Layout from '../../components/UI/Layouts/Layout/Layout';
@@ -12,9 +13,11 @@ class Login extends Component {
   render() {
     return (
       <Layout>
-        <Input label='Name' />
-        <Input label='Password' />
-        <Button name='Login' clicked={this.loginHanlder} />
+        <div className={classes.Login}>
+          <Input label='Name' type='text' />
+          <Input label='Password' type='text' />
+          <Button name='Login' clicked={this.loginHanlder} />
+        </div>
       </Layout>
     );
   }

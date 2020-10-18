@@ -1,11 +1,11 @@
 .Quidditch {
   width: 100%;
+  display: flex;
+  flex-flow: column;
 }
 
 .Quidditch h1 {
-  margin: 1rem 0 2rem 0;
-  color: #ffbd67;
-  text-align: center;
-  font-family: 'WizardWorld';
+  padding: 1rem 0 2rem 0;
+  margin: 0;
   border-bottom: 1px solid #427e96;
 }

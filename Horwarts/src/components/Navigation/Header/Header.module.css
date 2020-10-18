@@ -12,7 +12,7 @@
 }
 
 .Header h1 {
-  color: #e99e3c;
+  color: #cd8727;
   font-family: 'HarryP';
   font-size: 60px;
   margin: 0;
@@ -44,7 +44,7 @@
 
 .Navigation a {
   text-decoration: none;
-  color: #e99e3c;
+  color: #cd8727;
 }
 
 .Navigation a:hover,

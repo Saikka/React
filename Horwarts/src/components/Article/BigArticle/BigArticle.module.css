@@ -1,8 +1,11 @@
 .Article {
-  width: 600px;
+  background-image: url(../../../assets//images/page-ver.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 430px;
   height: 600px;
   top: 120px;
-  left: 20%;
+  left: 25%;
   position: fixed;
   z-index: 500;
 }
@@ -15,5 +18,13 @@
 
 .Article p {
   width: 350px;
+  height: 300px;
   margin: 0 auto;
+}
+
+.Article h6 {
+  text-align: center;
+  margin: 0;
+  font-family: 'MagicSchool';
+  font-size: 24px;
 }

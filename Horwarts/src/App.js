@@ -6,6 +6,7 @@ import News from './containers/News/News';
 import Quidditch from './containers/Quidditch/Quidditch';
 import Login from './containers/Login/Login';
 import Teacher from './containers/Teacher/Teacher';
+import MatchForm from './containers/Forms/MatchForm/MatchForm';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path='/quidditch' exact component={Quidditch} />
       <Route path='/login' exact component={Login} />
       <Route path='/teacher' component={Teacher} />
+      <Route path='/quidditch/add-match' exact component={MatchForm} />
     </div>
   );
 }
