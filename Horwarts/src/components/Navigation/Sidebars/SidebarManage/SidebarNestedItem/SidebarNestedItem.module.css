@@ -1,0 +1,46 @@
+.SidebarNestedClosed {
+  height: 60px;
+  background-image: url(../../../../../assets/images/scroll-closed.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.SidebarNestedOpened {
+  height: 140px;
+  background-image: url(../../../../../assets/images/scroll-open.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.SidebarNestedClosed h1,
+.SidebarNestedOpened h1 {
+  display: block;
+  padding-top: 10px;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  color: black;
+  text-decoration: none;
+  font-family: 'HarryP';
+  font-size: 36px;
+  font-weight: normal;
+}
+
+.SidebarNestedOpened ul {
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.SidebarNestedOpened li {
+  text-align: center;
+  font-family: 'HarryP';
+  font-size: 24px;
+}
+
+.SidebarNestedOpened a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: black;
+}

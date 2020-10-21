@@ -1,41 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
 
-export const addMatchSuccess = (match) => {
-  return {
-    type: actionTypes.ADD_MATCH_SUCCESS,
-    match: match
-  };
-};
-
-export const addMatchFail = (error) => {
-  return {
-    type: actionTypes.ADD_MATCH_FAIL,
-    error: error
-  };
-};
-
-export const addMatchStart = () => {
-  return {
-    type: actionTypes.ADD_MATCH_START
-  };
-};
-
-export const addMatch = (match) => {
-  return (dispatch) => {
-    dispatch(addMatchStart());
-    console.log(match);
-    axios
-      .post('/quidditch/add-match', match)
-      .then((response) => {
-        dispatch(addMatchSuccess(response.data.match));
-      })
-      .catch((error) => {
-        dispatch(addMatchFail(error.message));
-      });
-  };
-};
-
 export const fetchMatchesSuccess = (matches) => {
   return {
     type: actionTypes.FETCH_MATCHES_SUCCESS,
@@ -63,6 +28,40 @@ export const fetchMatches = () => {
       .get('/quidditch')
       .then((response) => {
         dispatch(fetchMatchesSuccess(response.data.matches));
+      })
+      .catch((error) => {
+        dispatch(addMatchFail(error.message));
+      });
+  };
+};
+
+export const addMatchSuccess = (match) => {
+  return {
+    type: actionTypes.ADD_MATCH_SUCCESS,
+    match: match
+  };
+};
+
+export const addMatchFail = (error) => {
+  return {
+    type: actionTypes.ADD_MATCH_FAIL,
+    error: error
+  };
+};
+
+export const addMatchStart = () => {
+  return {
+    type: actionTypes.ADD_MATCH_START
+  };
+};
+
+export const addMatch = (match) => {
+  return (dispatch) => {
+    dispatch(addMatchStart());
+    axios
+      .post('/quidditch/add-match', match)
+      .then((response) => {
+        dispatch(addMatchSuccess(response.data.match));
       })
       .catch((error) => {
         dispatch(addMatchFail(error.message));

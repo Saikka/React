@@ -7,9 +7,9 @@ import 'react-datetime/css/react-datetime.css';
 
 import classes from './MatchForm.module.css';
 import * as actions from '../../../store/actions';
-import Layout from '../../../components/UI/Layouts/Layout/Layout';
-import Button from '../../../components/UI/Button/Button';
-import Spinner from '../../../components/UI/Spinner/Spinner';
+import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
+import Button from '../../UI/Button/Button';
+import Spinner from '../../UI/Spinner/Spinner';
 
 class MatchForm extends Component {
   state = {
@@ -124,7 +124,7 @@ class MatchForm extends Component {
         </form>
       );
     }
-    return <Layout>{form}</Layout>;
+    return <LayoutScroll>{form}</LayoutScroll>;
   }
 }
 

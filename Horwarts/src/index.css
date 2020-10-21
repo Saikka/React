@@ -12,12 +12,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
-  text-align: center;
-  font-family: 'WizardWorld';
-  color: #cd8727;
-}
-
 #root {
   height: 100vh;
 }

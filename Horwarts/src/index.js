@@ -15,6 +15,7 @@ import * as serviceWorker from './serviceWorker';
 import newsReducer from './store/reducers/news';
 import housesReducer from './store/reducers/houses';
 import quidditchReducer from './store/reducers/quidditch';
+import teachersReducer from './store/reducers/teachers';
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
@@ -24,7 +25,8 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   news: newsReducer,
   houses: housesReducer,
-  quidditch: quidditchReducer
+  quidditch: quidditchReducer,
+  teachers: teachersReducer
 });
 
 const store = createStore(

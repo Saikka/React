@@ -1,6 +1,6 @@
 .Match {
   margin: 0;
-  padding: 0;
+  padding: 10px;
   width: 100%;
   list-style: none;
   display: flex;
@@ -10,7 +10,7 @@
 }
 
 .Match li {
-  color: #ffbd67;
+  color: #cd8727;
   padding: 5px;
   font-family: 'MagicSchool';
   font-size: 36px;
