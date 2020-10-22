@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DatePicker from 'react-datepicker';
+import { SingleDatePicker } from 'react-dates';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 import moment from 'moment';
-import 'react-datepicker/dist/react-datepicker-min.module.css';
-import 'react-datetime/css/react-datetime.css';
 
 import classes from './MatchForm.module.css';
 import * as actions from '../../../store/actions';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
+import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
 import Spinner from '../../UI/Spinner/Spinner';
 
@@ -31,9 +32,8 @@ class MatchForm extends Component {
         }
       }
     },
-    date: {
-      value: moment().toDate()
-    }
+    date: moment(),
+    focused: false
   };
 
   componentDidMount() {
@@ -55,24 +55,19 @@ class MatchForm extends Component {
   };
 
   dateChangedHandler = (date) => {
-    console.log(date);
-    const newDate = {
-      ...this.state.date,
-      value: date
-    };
-    this.setState({ date: newDate });
+    this.setState({ date: date });
   };
 
   addMatchHandler = (event) => {
     event.preventDefault();
     const match = {
       team1: {
-        house: this.state.form.team1.name.value,
-        score: this.state.form.team1.score.value
+        house: this.state.form.team1.value,
+        score: null
       },
       team2: {
-        house: this.state.form.team2.name.value,
-        score: this.state.form.team2.score.value
+        house: this.state.form.team2.value,
+        score: null
       },
       date: this.state.date.value
     };
@@ -90,39 +85,67 @@ class MatchForm extends Component {
     let form = <Spinner />;
     if (!this.props.loading) {
       form = (
-        <form className={classes.MatchForm} onSubmit={this.addMatchHandler}>
-          <h1>Add new match</h1>
-          {formElements.map((el) => (
-            <div key={el.id}>
-              <select
-                value={this.state.form[el.id].name.value}
-                onChange={(event) =>
-                  this.inputChangedHandler(event, el.id, 'name')
-                }
-              >
-                {this.props.houses.map((house) => (
-                  <option key={house.name} value={house._id}>
-                    {house.name}
-                  </option>
-                ))}
-              </select>
-              <input
-                type='number'
-                value={this.state.form[el.id].score.value}
-                onChange={(event) =>
-                  this.inputChangedHandler(event, el.id, 'score')
-                }
-              />
-            </div>
-          ))}
-          <DatePicker
-            selected={this.state.date.value}
-            onChange={this.dateChangedHandler}
-            dateFormat='dd/MM/yyyy'
+        <form className={classes.MatchForm}>
+          <h1>Add a new match</h1>
+          <SingleDatePicker
+            date={this.state.date}
+            onDateChange={(date) => this.dateChangedHandler(date)}
+            focused={this.state.focused}
+            onFocusChange={({ focused }) => this.setState({ focused })}
+            numberOfMonths={1}
+            isOutsideRange={() => false}
           />
+          <section>
+            <Input
+              elementType='select'
+              value={this.state.form.team1.name.value}
+              options={this.props.houses}
+              changed={(event) =>
+                this.inputChangedHandler(event, 'team1', 'name')
+              }
+            />
+            <h1>VS</h1>
+            <Input
+              elementType='select'
+              value={this.state.form.team2.name.value}
+              options={this.props.houses}
+              changed={(event) =>
+                this.inputChangedHandler(event, 'team2', 'name')
+              }
+            />
+          </section>
           <Button name='Add' />
         </form>
       );
+      // form = (
+      //   <form className={classes.MatchForm} onSubmit={this.addMatchHandler}>
+      //     <h1>Add new match</h1>
+      //     {formElements.map((el) => (
+      //       <div key={el.id}>
+      //         <select
+      //           value={this.state.form[el.id].name.value}
+      //           onChange={(event) =>
+      //             this.inputChangedHandler(event, el.id, 'name')
+      //           }
+      //         >
+      //           {this.props.houses.map((house) => (
+      //             <option key={house.name} value={house._id}>
+      //               {house.name}
+      //             </option>
+      //           ))}
+      //         </select>
+      //         <input
+      //           type='number'
+      //           value={this.state.form[el.id].score.value}
+      //           onChange={(event) =>
+      //             this.inputChangedHandler(event, el.id, 'score')
+      //           }
+      //         />
+      //       </div>
+      //     ))}
+      //
+      //   </form>
+      //);
     }
     return <LayoutScroll>{form}</LayoutScroll>;
   }

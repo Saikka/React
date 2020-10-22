@@ -14,8 +14,8 @@ class Login extends Component {
     return (
       <Layout>
         <div className={classes.Login}>
-          <Input label='Name' type='text' />
-          <Input label='Password' type='text' />
+          <Input label='Name' type='text' elementType='input' />
+          <Input label='Password' type='text' elementType='input' />
           <Button name='Login' clicked={this.loginHanlder} />
         </div>
       </Layout>

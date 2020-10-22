@@ -1,34 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import classes from './TeacherForm.module.css';
+import classes from './NewsForm.module.css';
 import * as actions from '../../../store/actions';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
+import { act } from 'react-dom/test-utils';
 
-class TeacherForm extends Component {
+class NewsForm extends Component {
   state = {
     form: {
-      firstname: {
-        label: 'Firstname',
+      title: {
+        label: 'Title',
         value: '',
-        type: 'text'
+        type: 'text',
+        elementType: 'input'
       },
-      lastname: {
-        label: 'Lastname',
+      content: {
+        label: 'Content',
         value: '',
-        type: 'text'
+        elementType: 'textarea'
       },
-      subject: {
-        label: 'Subject',
+      author: {
+        label: 'Author',
         value: '',
-        type: 'text'
-      },
-      classrom: {
-        label: 'Classroom',
-        value: 0,
-        type: 'number'
+        type: 'text',
+        elementType: 'input'
       }
     }
   };
@@ -46,13 +44,13 @@ class TeacherForm extends Component {
 
   addTeacherHandler = (event) => {
     event.preventDefault();
-    const teacher = {
-      firstname: this.state.form.firstname.value,
-      lastname: this.state.form.lastname.value,
-      subject: this.state.form.subject.value,
-      classroom: this.state.form.classrom.value
+    const article = {
+      title: this.state.form.title.value,
+      content: this.state.form.content.value,
+      author: this.state.form.author.value,
+      date: new Date()
     };
-    this.props.onAddTeacher(teacher);
+    this.props.onAddArticle(article);
   };
 
   render() {
@@ -65,14 +63,14 @@ class TeacherForm extends Component {
     }
     let form = (
       <form
-        className={classes.TeacherForm}
+        className={classes.NewsForm}
         onSubmit={(event) => this.addTeacherHandler(event)}
       >
-        <h1>Add a teacher</h1>
+        <h1>Add a new article</h1>
         {formElements.map((el) => (
           <Input
             key={el.id}
-            elementType='input'
+            elementType={el.config.elementType}
             label={el.config.label}
             type={el.config.type}
             value={el.config.value}
@@ -88,14 +86,14 @@ class TeacherForm extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.teachers.loading
+    loading: state.news.loading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddTeacher: (teacher) => dispatch(actions.addTeacher(teacher))
+    onAddArticle: (article) => dispatch(actions.addNews(article))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TeacherForm);
+export default connect(mapStateToProps, mapDispatchToProps)(NewsForm);

@@ -1,6 +1,7 @@
 .Input {
   width: 100%;
-  margin: 2rem auto 1rem auto;
+  margin: 1rem auto 1rem auto;
+  padding: 0 2rem 0 2rem;
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
@@ -13,7 +14,12 @@
   margin-bottom: 10px;
 }
 
-.Input input {
-  height: 20px;
+.Input input,
+.Input select {
+  height: 25px;
   font-family: 'HappyP';
+}
+
+.Input textarea {
+  height: 80px;
 }

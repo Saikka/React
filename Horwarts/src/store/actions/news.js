@@ -34,3 +34,37 @@ export const fetchNews = () => {
       });
   };
 };
+
+export const addNewsStart = () => {
+  return {
+    type: actionTypes.ADD_NEWS_START
+  };
+};
+
+export const addNewsSuccess = (news) => {
+  return {
+    type: actionTypes.ADD_NEWS_SUCCESS,
+    news: news
+  };
+};
+
+export const addNewsFail = (error) => {
+  return {
+    type: actionTypes.ADD_NEWS_FAIL,
+    error: error
+  };
+};
+
+export const addNews = (news) => {
+  return (dispatch) => {
+    dispatch(addNewsStart());
+    axios
+      .post('/news/add-news', news)
+      .then((res) => {
+        dispatch(addNewsSuccess(res.data.news));
+      })
+      .catch((err) => {
+        dispatch(addNewsFail(err));
+      });
+  };
+};
