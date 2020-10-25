@@ -20,3 +20,9 @@
   display: flex;
   justify-content: space-between;
 }
+
+.MainContainer {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+}

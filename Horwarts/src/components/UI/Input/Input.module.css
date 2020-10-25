@@ -14,12 +14,22 @@
   margin-bottom: 10px;
 }
 
-.Input input,
-.Input select {
-  height: 25px;
-  font-family: 'HappyP';
+.InputElement {
+  height: 30px;
+  outline: none;
+  border: 1px solid #ccc;
+  background-color: white;
+  font: inherit;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .Input textarea {
   height: 80px;
+}
+
+.Invalid {
+  border: 1px solid red;
+  background-color: #fda49a;
 }

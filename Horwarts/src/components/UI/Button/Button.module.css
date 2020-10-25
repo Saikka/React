@@ -12,3 +12,8 @@
   border: 1px solid #427e96;
   border-radius: 5px;
 }
+
+.Button button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
