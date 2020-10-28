@@ -34,6 +34,43 @@ const reducer = (state = initialState, action) => {
         loading: false,
         news: state.news.concat(action.news)
       };
+    case actionTypes.EDIT_NEWS_SUCCESS:
+      const updatedNews = {
+        ...state.news
+      };
+      let id;
+      const singleNews = {
+        ...updatedNews.find((news, index) => {
+          if (news._id === action.id) {
+            id = index;
+            return news;
+          } else {
+            return null;
+          }
+        }),
+        ...action.news
+      };
+      updatedNews[id] = singleNews;
+      return {
+        ...state,
+        news: updatedNews,
+        error: null
+      };
+    case actionTypes.EDIT_NEWS_FAIL:
+      return {
+        ...state,
+        error: action.error
+      };
+    case actionTypes.DELETE_NEWS_SUCCESS:
+      return {
+        ...state,
+        news: state.news.filter((el) => el._id !== action.id)
+      };
+    case actionTypes.DELETE_NEWS_FAIL:
+      return {
+        ...state,
+        error: action.error
+      };
     default:
       return state;
   }

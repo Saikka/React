@@ -59,12 +59,67 @@ export const addNews = (news) => {
   return (dispatch) => {
     dispatch(addNewsStart());
     axios
-      .post('/news/add-news', news)
+      .post('/news/add', news)
       .then((res) => {
         dispatch(addNewsSuccess(res.data.news));
       })
       .catch((err) => {
         dispatch(addNewsFail(err));
+      });
+  };
+};
+
+export const editNewsSuccess = (id, news) => {
+  return {
+    type: actionTypes.EDIT_NEWS_SUCCESS,
+    id: id,
+    news: news
+  };
+};
+
+export const editNewsFail = (error) => {
+  return {
+    type: actionTypes.EDIT_NEWS_FAIL,
+    error: error
+  };
+};
+
+export const editNews = (id, news) => {
+  return (dispatch) => {
+    axios
+      .put('/news/edit/' + id, news)
+      .then((response) => {
+        dispatch(editNewsSuccess(id, response.data.news));
+      })
+      .catch((error) => {
+        dispatch(editNewsFail(error));
+      });
+  };
+};
+
+export const deleteNewsSuccess = (id) => {
+  return {
+    type: actionTypes.DELETE_NEWS_SUCCESS,
+    id: id
+  };
+};
+
+export const deleteNewsFail = (error) => {
+  return {
+    type: actionTypes.DELETE_NEWS_FAIL,
+    error: error
+  };
+};
+
+export const deleteNews = (id) => {
+  return (dispatch) => {
+    axios
+      .delete('/news/delete/' + id)
+      .then(() => {
+        dispatch(deleteNewsSuccess(id));
+      })
+      .catch((error) => {
+        dispatch(deleteNewsFail(error));
       });
   };
 };

@@ -14,7 +14,9 @@ const sidebarNestedItem = (props) => (
     {props.isOpen ? (
       <ul>
         <li>
-          <NavLink to={props.path + 'add'}>Add new</NavLink>
+          <NavLink to={props.path + 'add'} key='add'>
+            Add new
+          </NavLink>
         </li>
         <li>
           <NavLink to={props.path + 'edit'}>Edit existing</NavLink>

@@ -10,6 +10,8 @@ import Button from '../../UI/Button/Button';
 
 class NewsForm extends Component {
   state = {
+    isEdit: false,
+    id: null,
     form: {
       title: {
         label: 'Title',
@@ -50,6 +52,57 @@ class NewsForm extends Component {
     formIsValid: false
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.key !== this.props.location.key) {
+      this.setForm();
+    }
+  }
+
+  componentDidMount() {
+    this.setForm();
+  }
+
+  setForm = () => {
+    let news;
+    let isValid = false;
+    if (this.props.match.path.includes('edit')) {
+      let allNews;
+      if (this.props.news.length === 0) {
+        allNews = JSON.parse(localStorage.getItem('news'));
+      } else {
+        allNews = this.props.news;
+      }
+      news = allNews.find((el) => el._id === this.props.match.params.id);
+      isValid = true;
+    } else {
+      news = { title: '', content: '', author: '' };
+    }
+    const updatedForm = {
+      ...this.state.form,
+      title: {
+        ...this.state.form.title,
+        value: news.title,
+        valid: isValid
+      },
+      content: {
+        ...this.state.form.content,
+        value: news.content,
+        valid: isValid
+      },
+      author: {
+        ...this.state.form.author,
+        value: news.author,
+        valid: isValid
+      }
+    };
+    this.setState({
+      form: updatedForm,
+      formIsValid: isValid,
+      id: this.props.match.params.id,
+      isEdit: true
+    });
+  };
+
   inputChangedHandler = (event, controlName) => {
     const updatedForm = {
       ...this.state.form,
@@ -77,7 +130,12 @@ class NewsForm extends Component {
       author: this.state.form.author.value,
       date: new Date()
     };
-    this.props.onAddArticle(article);
+    if (this.state.isEdit) {
+      this.props.onEditArticle(this.state.id, article);
+    } else {
+      this.props.onAddArticle(article);
+    }
+    localStorage.removeItem('news');
   };
 
   inputTouchedHandler = (controlName) => {
@@ -127,13 +185,15 @@ class NewsForm extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.news.loading
+    loading: state.news.loading,
+    news: state.news.news
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddArticle: (article) => dispatch(actions.addNews(article))
+    onAddArticle: (article) => dispatch(actions.addNews(article)),
+    onEditArticle: (id, article) => dispatch(actions.editNews(id, article))
   };
 };
 
