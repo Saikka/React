@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   matches: [],
   loading: false,
+  isDone: false,
   error: null
 };
 
@@ -11,7 +12,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_MATCHES_START:
       return {
         ...state,
-        loading: true
+        loading: true,
+        isDone: false
       };
     case actionTypes.FETCH_MATCHES_SUCCESS:
       return {
@@ -25,22 +27,43 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: action.error
       };
-    case actionTypes.ADD_MATCH_START:
-      return {
-        ...state,
-        loading: true
-      };
     case actionTypes.ADD_MATCH_SUCCESS: {
       return {
         ...state,
         matches: state.matches.concat(action.match),
-        loading: false
+        isDone: true
       };
     }
-    case actionTypes.ADD_MATCH_FAIL: {
+    case actionTypes.EDIT_MATCH_SUCCESS: {
+      let id;
+      const updatedMatches = [...state.matches];
+      const updatedMatch = {
+        ...updatedMatches.find((el, index) => {
+          if (el._id === action.id) {
+            id = index;
+            return el;
+          }
+        }),
+        ...action.match
+      };
+      updatedMatches[id] = updatedMatch;
       return {
         ...state,
-        loading: false,
+        matches: updatedMatches,
+        isDone: true
+      };
+    }
+    case actionTypes.DELETE_MATCH_SUCCESS: {
+      return {
+        ...state,
+        matches: state.matches.filter((el) => el._id !== action.id)
+      };
+    }
+    case actionTypes.ADD_MATCH_FAIL:
+    case actionTypes.EDIT_MATCH_FAIL:
+    case actionTypes.DELETE_MATCH_FAIL: {
+      return {
+        ...state,
         error: action.error
       };
     }

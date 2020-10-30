@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import classes from './NewsForm.module.css';
 import * as actions from '../../../store/actions';
@@ -10,8 +11,6 @@ import Button from '../../UI/Button/Button';
 
 class NewsForm extends Component {
   state = {
-    isEdit: false,
-    id: null,
     form: {
       title: {
         label: 'Title',
@@ -49,7 +48,9 @@ class NewsForm extends Component {
         touched: false
       }
     },
-    formIsValid: false
+    formIsValid: false,
+    isEdit: false,
+    id: null
   };
 
   componentDidUpdate(prevProps) {
@@ -65,8 +66,10 @@ class NewsForm extends Component {
   setForm = () => {
     let news;
     let isValid = false;
+    let isEdit = false;
     if (this.props.match.path.includes('edit')) {
       let allNews;
+      isEdit = true;
       if (this.props.news.length === 0) {
         allNews = JSON.parse(localStorage.getItem('news'));
       } else {
@@ -99,7 +102,7 @@ class NewsForm extends Component {
       form: updatedForm,
       formIsValid: isValid,
       id: this.props.match.params.id,
-      isEdit: true
+      isEdit: isEdit
     });
   };
 
@@ -162,7 +165,7 @@ class NewsForm extends Component {
         className={classes.NewsForm}
         onSubmit={(event) => this.addTeacherHandler(event)}
       >
-        <h1>Add a new article</h1>
+        <h1>{this.state.isEdit ? 'Edit news' : 'Add news'}</h1>
         {formElements.map((el) => (
           <Input
             key={el.id}
@@ -176,16 +179,24 @@ class NewsForm extends Component {
             blured={() => this.inputTouchedHandler(el.id)}
           />
         ))}
-        <Button name='Add' disabled={!this.state.formIsValid} />
+        <Button
+          name={this.state.isEdit ? 'Edit' : 'Add'}
+          disabled={!this.state.formIsValid}
+        />
       </form>
     );
-    return <LayoutScroll>{form}</LayoutScroll>;
+    return (
+      <LayoutScroll>
+        {this.props.isDone ? <Redirect to='/manage/news/edit' /> : null}
+        {form}
+      </LayoutScroll>
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.news.loading,
+    isDone: state.news.isDone,
     news: state.news.news
   };
 };

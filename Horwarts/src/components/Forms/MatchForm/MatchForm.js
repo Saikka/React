@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -27,7 +28,7 @@ class MatchForm extends Component {
           validation: {
             isPositive: true
           },
-          valid: false,
+          valid: true,
           touched: false
         }
       },
@@ -42,7 +43,7 @@ class MatchForm extends Component {
           validation: {
             isPositive: true
           },
-          valid: false,
+          valid: true,
           touched: false
         }
       }
@@ -50,12 +51,85 @@ class MatchForm extends Component {
     formIsValid: true,
     date: moment(),
     focused: false,
-    isNew: true
+    isNew: true,
+    isEdit: false,
+    id: null
   };
 
   componentDidMount() {
     this.props.onFetchHouses();
+    this.setForm();
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.key !== this.props.location.key) {
+      this.setForm();
+    }
+  }
+
+  setForm = () => {
+    let match;
+    let isEdit = false;
+    let date = moment();
+    let isNew = true;
+    if (this.props.match.path.includes('edit')) {
+      let matches;
+      isEdit = true;
+      if (this.props.matches.length === 0) {
+        matches = JSON.parse(localStorage.getItem('matches'));
+      } else {
+        matches = this.props.matches;
+      }
+      match = matches.find((el) => el._id === this.props.match.params.id);
+      date = moment(match.date);
+      if (date < moment()) {
+        isNew = false;
+      }
+    } else {
+      match = {
+        team1: { house: { _id: this.state.form.team1.name.value }, score: 0 },
+        team2: { house: { _id: this.state.form.team2.name.value }, score: 0 }
+      };
+    }
+    const updatedForm = {
+      ...this.state.form,
+      team1: {
+        name: {
+          ...this.state.form.team1.name,
+          value: match.team1.house._id
+        },
+        score: {
+          ...this.state.form.team1.score,
+          value: match.team1.score,
+          valid: match.team1.score >= 0 ? true : false
+        }
+      },
+      team2: {
+        name: {
+          ...this.state.form.team2.name,
+          value: match.team2.house._id
+        },
+        score: {
+          ...this.state.form.team2.score,
+          value: match.team2.score,
+          valid: match.team2.score >= 0 ? true : false
+        }
+      }
+    };
+    let isValid = true;
+    if (!this.state.isNew) {
+      isValid =
+        true && updatedForm.team1.score.valid && updatedForm.team2.score.valid;
+    }
+    this.setState({
+      form: updatedForm,
+      id: this.props.match.params.id,
+      isEdit: isEdit,
+      isNew: isNew,
+      date: date,
+      formIsValid: isValid
+    });
+  };
 
   inputChangedHandler = (event, teamName, optionName) => {
     const updatedForm = {
@@ -72,8 +146,11 @@ class MatchForm extends Component {
         }
       }
     };
-    const isValid =
-      this.state.isFormValid && updatedForm[teamName][optionName].valid;
+    let isValid = true;
+    if (!this.state.isNew) {
+      isValid =
+        true && updatedForm.team1.score.valid && updatedForm.team2.score.valid;
+    }
     this.setState({ form: updatedForm, formIsValid: isValid });
   };
 
@@ -113,7 +190,11 @@ class MatchForm extends Component {
       },
       date: this.state.date
     };
-    this.props.onAddMatch(match);
+    if (this.state.isEdit) {
+      this.props.onEditMatch(this.state.id, match);
+    } else {
+      this.props.onAddMatch(match);
+    }
   };
 
   render() {
@@ -131,7 +212,7 @@ class MatchForm extends Component {
           className={classes.MatchForm}
           onSubmit={(event) => this.addMatchHandler(event)}
         >
-          <h1>Add a new match</h1>
+          <h1>{this.state.isEdit ? 'Edit match' : 'Add a new match'}</h1>
           <SingleDatePicker
             date={this.state.date}
             onDateChange={(date) => this.dateChangedHandler(date)}
@@ -191,25 +272,36 @@ class MatchForm extends Component {
               ) : null}
             </div>
           </div>
-          <Button name='Add' disabled={!this.state.formIsValid} />
+          <Button
+            name={this.state.isEdit ? 'Edit' : 'Add'}
+            disabled={!this.state.formIsValid}
+          />
         </form>
       );
     }
-    return <LayoutScroll>{form}</LayoutScroll>;
+    return (
+      <LayoutScroll>
+        {this.props.isDone ? <Redirect to='/manage/matches/edit' /> : null}
+        {form}
+      </LayoutScroll>
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     houses: state.houses.houses,
-    loading: state.houses.loading
+    loading: state.houses.loading,
+    matches: state.quidditch.matches,
+    isDone: state.quidditch.isDone
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onFetchHouses: () => dispatch(actions.fetchHouses()),
-    onAddMatch: (match) => dispatch(actions.addMatch(match))
+    onAddMatch: (match) => dispatch(actions.addMatch(match)),
+    onEditMatch: (id, match) => dispatch(actions.editMatch(id, match))
   };
 };
 

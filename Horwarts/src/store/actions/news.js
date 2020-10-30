@@ -35,12 +35,6 @@ export const fetchNews = () => {
   };
 };
 
-export const addNewsStart = () => {
-  return {
-    type: actionTypes.ADD_NEWS_START
-  };
-};
-
 export const addNewsSuccess = (news) => {
   return {
     type: actionTypes.ADD_NEWS_SUCCESS,
@@ -57,7 +51,6 @@ export const addNewsFail = (error) => {
 
 export const addNews = (news) => {
   return (dispatch) => {
-    dispatch(addNewsStart());
     axios
       .post('/news/add', news)
       .then((res) => {
@@ -92,6 +85,7 @@ export const editNews = (id, news) => {
         dispatch(editNewsSuccess(id, response.data.news));
       })
       .catch((error) => {
+        console.log(error);
         dispatch(editNewsFail(error));
       });
   };
@@ -115,8 +109,8 @@ export const deleteNews = (id) => {
   return (dispatch) => {
     axios
       .delete('/news/delete/' + id)
-      .then(() => {
-        dispatch(deleteNewsSuccess(id));
+      .then((response) => {
+        dispatch(deleteNewsSuccess(response.data.id));
       })
       .catch((error) => {
         dispatch(deleteNewsFail(error));

@@ -7,6 +7,7 @@ import TeacherForm from '../../components/Forms/TeacherForm/TeacherForm';
 import MatchForm from '../../components/Forms/MatchForm/MatchForm';
 import NewsForm from '../../components/Forms/NewsForm/NewsForm';
 import NewsList from '../../components/Lists/NewsList/NewsList';
+import QuidditchList from '../../components/Lists/QuidditchList/QuidditchList';
 
 class Manage extends Component {
   render() {
@@ -15,6 +16,8 @@ class Manage extends Component {
         <SidebarManage />
         <Switch>
           <Route path='/manage/matches/add' component={MatchForm} />
+          <Route path='/manage/matches/edit/:id' component={MatchForm} />
+          <Route path='/manage/matches/edit' component={QuidditchList} />
           <Route path='/manage/teachers/add' component={TeacherForm} />
           <Route path='/manage/news/add' component={NewsForm} />
           <Route path='/manage/news/edit/:id' component={NewsForm} />
