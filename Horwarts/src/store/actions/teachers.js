@@ -49,22 +49,70 @@ export const addTeacherFail = (error) => {
   };
 };
 
-export const addTeacherStart = () => {
-  return {
-    type: actionTypes.ADD_TEACHER_START
-  };
-};
-
 export const addTeacher = (teacher) => {
   return (dispatch) => {
-    dispatch(addTeacherStart());
     axios
-      .post('/teachers/add-teacher', teacher)
+      .post('/teachers/add', teacher)
       .then((response) => {
         dispatch(addTeacherSuccess(response.data.teacher));
       })
       .catch((error) => {
         dispatch(addTeacherFail(error));
+      });
+  };
+};
+
+export const editTeacherSuccess = (id, teacher) => {
+  return {
+    type: actionTypes.EDIT_TEACHER_SUCCESS,
+    teacher: teacher,
+    id: id
+  };
+};
+
+export const editTeacherFail = (error) => {
+  return {
+    type: actionTypes.EDIT_TEACHER_FAIL,
+    error: error
+  };
+};
+
+export const editTeacher = (id, teacher) => {
+  return (dispatch) => {
+    axios
+      .put('/teachers/edit/' + id, teacher)
+      .then((response) => {
+        dispatch(editTeacherSuccess(id, response.data.teacher));
+      })
+      .catch((error) => {
+        dispatch(editTeacherFail(error));
+      });
+  };
+};
+
+export const deleteTeacherSuccess = (id) => {
+  return {
+    type: actionTypes.DELETE_TEACHER_SUCCESS,
+    id: id
+  };
+};
+
+export const deleteTeacherFail = (error) => {
+  return {
+    type: actionTypes.DELETE_TEACHER_FAIL,
+    error: error
+  };
+};
+
+export const deleteTeacher = (id) => {
+  return (dispatch) => {
+    axios
+      .delete('/teachers/delete/' + id)
+      .then((response) => {
+        dispatch(deleteTeacherSuccess(response.data.id));
+      })
+      .catch((error) => {
+        dispatch(deleteTeacherFail(error));
       });
   };
 };

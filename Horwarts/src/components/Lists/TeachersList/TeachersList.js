@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import Moment from 'moment';
 
-import classes from './QuidditchList.module.css';
+import classes from './TeachersList.module.css';
 import * as actions from '../../../store/actions';
 import axios from '../../../axios';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
 import Spinner from '../../UI/Spinner/Spinner';
 
-class QuidditchList extends Component {
+class TeachersList extends Component {
   componentDidMount() {
-    this.props.onFetchMatches();
+    this.props.onFetchTeaches();
   }
 
-  storeMatchesHandler = () => {
-    localStorage.setItem('matches', JSON.stringify(this.props.matches));
+  storeTeachersHandler = () => {
+    localStorage.setItem('teachers', JSON.stringify(this.props.teachers));
   };
 
   render() {
@@ -25,20 +24,21 @@ class QuidditchList extends Component {
       table = (
         <table>
           <tbody>
-            {this.props.matches.map((el) => (
+            {this.props.teachers.map((el) => (
               <tr key={el._id}>
-                <td>{el.team1.house.name + ' - ' + el.team2.house.name}</td>
-                <td>{Moment(el.date).format('DD-MM-YYYY')}</td>
+                <td>{el.firstname + ' ' + el.lastname}</td>
                 <td>
                   <NavLink
                     to={this.props.match.path + '/' + el._id}
                     key='edit'
-                    onClick={this.storeMatchesHandler}
+                    onClick={this.storeTeachersHandler}
                   >
                     EDIT
                   </NavLink>
                 </td>
-                <td onClick={() => this.props.onDeleteMatch(el._id)}>DELETE</td>
+                <td onClick={() => this.props.onDeleteTeacher(el._id)}>
+                  DELETE
+                </td>
               </tr>
             ))}
           </tbody>
@@ -47,8 +47,8 @@ class QuidditchList extends Component {
     }
     return (
       <LayoutScroll>
-        <div className={classes.QuidditchList}>
-          <h1>List of matches</h1>
+        <div className={classes.TeachersList}>
+          <h1>List of teachers</h1>
           {table}
         </div>
       </LayoutScroll>
@@ -58,19 +58,19 @@ class QuidditchList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    matches: state.quidditch.matches,
-    loading: state.quidditch.loading
+    teachers: state.teachers.teachers,
+    loading: state.teachers.loading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFetchMatches: () => dispatch(actions.fetchMatches()),
-    onDeleteMatch: (id) => dispatch(actions.deleteMatch(id))
+    onFetchTeaches: () => dispatch(actions.fetchTeachers()),
+    onDeleteTeacher: (id) => dispatch(actions.deleteTeacher(id))
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withErrorHandler(QuidditchList, axios));
+)(withErrorHandler(TeachersList, axios));

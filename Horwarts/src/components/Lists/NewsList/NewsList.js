@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom';
 
 import classes from './NewsList.module.css';
 import * as actions from '../../../store/actions';
+import axios from '../../../axios';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
 import Spinner from '../../UI/Spinner/Spinner';
 
@@ -66,4 +68,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewsList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(NewsList, axios));

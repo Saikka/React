@@ -42,6 +42,8 @@ const reducer = (state = initialState, action) => {
           if (news._id === action.id) {
             id = index;
             return news;
+          } else {
+            return null;
           }
         }),
         ...action.news

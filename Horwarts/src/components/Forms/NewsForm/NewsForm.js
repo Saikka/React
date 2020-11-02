@@ -5,6 +5,8 @@ import { Redirect } from 'react-router-dom';
 import classes from './NewsForm.module.css';
 import * as actions from '../../../store/actions';
 import { checkValidity } from '../Validation';
+import axios from '../../../axios';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
@@ -135,10 +137,10 @@ class NewsForm extends Component {
     };
     if (this.state.isEdit) {
       this.props.onEditArticle(this.state.id, article);
+      localStorage.removeItem('news');
     } else {
       this.props.onAddArticle(article);
     }
-    localStorage.removeItem('news');
   };
 
   inputTouchedHandler = (controlName) => {
@@ -208,4 +210,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewsForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(NewsForm, axios));

@@ -30,6 +30,7 @@ export const fetchNews = () => {
         dispatch(fetchNewsSuccess(res.data.news));
       })
       .catch((err) => {
+        console.log(err);
         dispatch(fetchNewsFail(err));
       });
   };
@@ -85,7 +86,6 @@ export const editNews = (id, news) => {
         dispatch(editNewsSuccess(id, response.data.news));
       })
       .catch((error) => {
-        console.log(error);
         dispatch(editNewsFail(error));
       });
   };

@@ -42,6 +42,8 @@ const reducer = (state = initialState, action) => {
           if (el._id === action.id) {
             id = index;
             return el;
+          } else {
+            return null;
           }
         }),
         ...action.match

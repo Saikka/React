@@ -9,6 +9,8 @@ import moment from 'moment';
 import classes from './MatchForm.module.css';
 import * as actions from '../../../store/actions';
 import { checkValidity } from '../Validation';
+import axios from '../../../axios';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
@@ -192,6 +194,7 @@ class MatchForm extends Component {
     };
     if (this.state.isEdit) {
       this.props.onEditMatch(this.state.id, match);
+      localStorage.removeItem('matches');
     } else {
       this.props.onAddMatch(match);
     }
@@ -305,4 +308,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MatchForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(MatchForm, axios));

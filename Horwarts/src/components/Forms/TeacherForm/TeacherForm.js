@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import classes from './TeacherForm.module.css';
 import * as actions from '../../../store/actions';
 import { checkValidity } from '../Validation';
+import axios from '../../../axios';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
@@ -44,7 +47,7 @@ class TeacherForm extends Component {
         valid: false,
         touched: false
       },
-      classrom: {
+      classroom: {
         label: 'Classroom',
         value: '',
         type: 'text',
@@ -56,7 +59,7 @@ class TeacherForm extends Component {
         touched: false
       },
       image: {
-        label: 'Classroom',
+        label: 'Image',
         value: null,
         type: 'file',
         validation: {
@@ -66,7 +69,67 @@ class TeacherForm extends Component {
         touched: false
       }
     },
-    formIsValid: false
+    formIsValid: false,
+    isEdit: false,
+    id: null
+  };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.key !== this.props.location.key) {
+      this.setForm();
+    }
+  }
+
+  componentDidMount() {
+    this.setForm();
+  }
+
+  setForm = () => {
+    let teacher;
+    let isValid = false;
+    let isEdit = false;
+    if (this.props.match.path.includes('edit')) {
+      let teachers;
+      isEdit = true;
+      if (this.props.teachers.length === 0) {
+        teachers = JSON.parse(localStorage.getItem('teachers'));
+      } else {
+        teachers = this.props.teachers;
+      }
+      teacher = teachers.find((el) => el._id === this.props.match.params.id);
+      isValid = true;
+    } else {
+      teacher = { firstname: '', lastname: '', subject: '', classroom: '' };
+    }
+    const updatedForm = {
+      ...this.state.form,
+      firstname: {
+        ...this.state.form.firstname,
+        value: teacher.firstname,
+        valid: isValid
+      },
+      lastname: {
+        ...this.state.form.lastname,
+        value: teacher.lastname,
+        valid: isValid
+      },
+      subject: {
+        ...this.state.form.subject,
+        value: teacher.subject,
+        valid: isValid
+      },
+      classroom: {
+        ...this.state.form.classroom,
+        value: teacher.classroom,
+        valid: isValid
+      }
+    };
+    this.setState({
+      form: updatedForm,
+      formIsValid: isValid,
+      id: this.props.match.params.id,
+      isEdit: isEdit
+    });
   };
 
   inputChangedHandler = (event, controlName) => {
@@ -109,13 +172,17 @@ class TeacherForm extends Component {
     teacher.append('firstname', this.state.form.firstname.value);
     teacher.append('lastname', this.state.form.lastname.value);
     teacher.append('subject', this.state.form.subject.value);
-    teacher.append('classroom', this.state.form.classrom.value);
-    teacher.append('image', this.state.image);
-    this.props.onAddTeacher(teacher);
+    teacher.append('classroom', this.state.form.classroom.value);
+    teacher.append('image', this.state.form.image.value);
+    if (this.state.isEdit) {
+      this.props.onEditTeacher(this.state.id, teacher);
+      localStorage.removeItem('teachers');
+    } else {
+      this.props.onAddTeacher(teacher);
+    }
   };
 
   render() {
-    console.log(this.state.form);
     const formElements = [];
     for (let key in this.state.form) {
       formElements.push({
@@ -128,7 +195,7 @@ class TeacherForm extends Component {
         className={classes.TeacherForm}
         onSubmit={(event) => this.addTeacherHandler(event)}
       >
-        <h1>Add a teacher</h1>
+        <h1>{this.state.isEdit ? 'Edit teacher' : 'Add a new teacher'}</h1>
         {formElements.map((el) => (
           <Input
             key={el.id}
@@ -142,23 +209,38 @@ class TeacherForm extends Component {
             blured={() => this.inputTouchedHandler(el.id)}
           />
         ))}
-        <Button name='Add' disabled={!this.state.formIsValid} />
+        <Button
+          name={this.state.isEdit ? 'Edit' : 'Add'}
+          disabled={!this.state.formIsValid}
+        />
       </form>
     );
-    return <LayoutScroll>{form}</LayoutScroll>;
+    return (
+      <LayoutScroll>
+        {this.props.isDone ? <Redirect to='/manage/teachers/edit' /> : null}
+        {form}
+      </LayoutScroll>
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.teachers.loading
+    loading: state.teachers.loading,
+    teachers: state.teachers.teachers,
+    isDone: state.teachers.isDone
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddTeacher: (teacher) => dispatch(actions.addTeacher(teacher))
+    onAddTeacher: (teacher) => dispatch(actions.addTeacher(teacher)),
+    onEditTeacher: (id, teacher) => dispatch(actions.editTeacher(id, teacher)),
+    onFetchTeachers: () => dispatch(actions.fetchTeachers())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TeacherForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(TeacherForm, axios));
