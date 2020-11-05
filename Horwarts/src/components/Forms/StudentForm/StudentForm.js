@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import classes from './TeacherForm.module.css';
+import classes from './StudentForm.module.css';
 import * as actions from '../../../store/actions';
 import { checkValidity } from '../Validation';
 import axios from '../../../axios';
@@ -10,12 +10,14 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import LayoutScroll from '../../UI/Layouts/LayoutScroll/LayoutScroll';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
+import Spinner from '../../UI/Spinner/Spinner';
 
-class TeacherForm extends Component {
+class StudentForm extends Component {
   state = {
     form: {
       firstname: {
         label: 'Firstname',
+        elementType: 'input',
         value: '',
         type: 'text',
         validation: {
@@ -27,6 +29,7 @@ class TeacherForm extends Component {
       },
       lastname: {
         label: 'Lastname',
+        elementType: 'input',
         value: '',
         type: 'text',
         validation: {
@@ -36,19 +39,17 @@ class TeacherForm extends Component {
         valid: false,
         touched: false
       },
-      subject: {
-        label: 'Subject',
-        value: '',
-        type: 'text',
-        validation: {
-          required: true,
-          minLength: 3
-        },
-        valid: false,
+      house: {
+        label: 'House',
+        elementType: 'select',
+        value: '5f883a808ff1d31cc473bf6e',
+        validation: {},
+        valid: true,
         touched: false
       },
-      classroom: {
-        label: 'Classroom',
+      year: {
+        label: 'Year',
+        elementType: 'input',
         value: '',
         type: 'text',
         validation: {
@@ -60,6 +61,7 @@ class TeacherForm extends Component {
       },
       image: {
         label: 'Image',
+        elementType: 'input',
         value: null,
         type: 'file',
         validation: {
@@ -81,46 +83,52 @@ class TeacherForm extends Component {
   }
 
   componentDidMount() {
+    this.props.onFetchHouses();
     this.setForm();
   }
 
   setForm = () => {
-    let teacher;
+    let student;
     let isValid = false;
     let isEdit = false;
     if (this.props.match.path.includes('edit')) {
-      let teachers;
+      let students;
       isEdit = true;
-      if (this.props.teachers.length === 0) {
-        teachers = JSON.parse(localStorage.getItem('teachers'));
+      if (this.props.students.length === 0) {
+        students = JSON.parse(localStorage.getItem('students'));
       } else {
-        teachers = this.props.teachers;
+        students = this.props.students;
       }
-      teacher = teachers.find((el) => el._id === this.props.match.params.id);
+      student = students.find((el) => el._id === this.props.match.params.id);
       isValid = true;
     } else {
-      teacher = { firstname: '', lastname: '', subject: '', classroom: '' };
+      student = {
+        firstname: '',
+        lastname: '',
+        house: '5f883a808ff1d31cc473bf6e',
+        year: ''
+      };
     }
     const updatedForm = {
       ...this.state.form,
       firstname: {
         ...this.state.form.firstname,
-        value: teacher.firstname,
+        value: student.firstname,
         valid: isValid
       },
       lastname: {
         ...this.state.form.lastname,
-        value: teacher.lastname,
+        value: student.lastname,
         valid: isValid
       },
-      subject: {
-        ...this.state.form.subject,
-        value: teacher.subject,
-        valid: isValid
+      house: {
+        ...this.state.form.house,
+        value: student.house,
+        valid: true
       },
-      classroom: {
-        ...this.state.form.classroom,
-        value: teacher.classroom,
+      year: {
+        ...this.state.form.year,
+        value: student.year,
         valid: isValid
       }
     };
@@ -166,58 +174,64 @@ class TeacherForm extends Component {
     this.setState({ form: updatedForm });
   };
 
-  addTeacherHandler = (event) => {
+  addStudentHandler = (event) => {
     event.preventDefault();
-    const teacher = new FormData();
-    teacher.append('firstname', this.state.form.firstname.value);
-    teacher.append('lastname', this.state.form.lastname.value);
-    teacher.append('subject', this.state.form.subject.value);
-    teacher.append('classroom', this.state.form.classroom.value);
-    teacher.append('image', this.state.form.image.value);
+    const student = new FormData();
+    student.append('firstname', this.state.form.firstname.value);
+    student.append('lastname', this.state.form.lastname.value);
+    student.append('house', this.state.form.house.value);
+    student.append('year', this.state.form.year.value);
+    student.append('image', this.state.form.image.value);
     if (this.state.isEdit) {
-      this.props.onEditTeacher(this.state.id, teacher);
-      localStorage.removeItem('teachers');
+      this.props.onEditStudent(this.state.id, student);
+      localStorage.removeItem('students');
     } else {
-      this.props.onAddTeacher(teacher);
+      this.props.onAddStudent(student);
     }
   };
 
   render() {
-    const formElements = [];
-    for (let key in this.state.form) {
-      formElements.push({
-        id: key,
-        config: this.state.form[key]
-      });
-    }
-    let form = (
-      <form
-        className={classes.TeacherForm}
-        onSubmit={(event) => this.addTeacherHandler(event)}
-      >
-        <h1>{this.state.isEdit ? 'Edit teacher' : 'Add a new teacher'}</h1>
-        {formElements.map((el) => (
-          <Input
-            key={el.id}
-            elementType='input'
-            label={el.config.label}
-            type={el.config.type}
-            value={el.config.value}
-            invalid={!el.config.valid}
-            touched={el.config.touched}
-            changed={(event) => this.inputChangedHandler(event, el.id)}
-            blured={() => this.inputTouchedHandler(el.id)}
+    let form = <Spinner />;
+    if (!this.props.loading) {
+      const formElements = [];
+      for (let key in this.state.form) {
+        formElements.push({
+          id: key,
+          config: this.state.form[key]
+        });
+      }
+      form = (
+        <form
+          className={classes.StudentForm}
+          onSubmit={(event) => this.addStudentHandler(event)}
+        >
+          <h1>{this.state.isEdit ? 'Edit student' : 'Add a new student'}</h1>
+          {formElements.map((el) => (
+            <Input
+              key={el.id}
+              elementType={el.config.elementType}
+              label={el.config.label}
+              type={el.config.elementType !== 'select' ? el.config.type : null}
+              options={
+                el.config.elementType === 'select' ? this.props.houses : null
+              }
+              value={el.config.value}
+              invalid={!el.config.valid}
+              touched={el.config.touched}
+              changed={(event) => this.inputChangedHandler(event, el.id)}
+              blured={() => this.inputTouchedHandler(el.id)}
+            />
+          ))}
+          <Button
+            name={this.state.isEdit ? 'Edit' : 'Add'}
+            disabled={!this.state.formIsValid}
           />
-        ))}
-        <Button
-          name={this.state.isEdit ? 'Edit' : 'Add'}
-          disabled={!this.state.formIsValid}
-        />
-      </form>
-    );
+        </form>
+      );
+    }
     return (
       <LayoutScroll>
-        {this.props.isDone ? <Redirect to='/manage/teachers/edit' /> : null}
+        {this.props.isDone ? <Redirect to='/manage/students/edit' /> : null}
         {form}
       </LayoutScroll>
     );
@@ -226,20 +240,23 @@ class TeacherForm extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    teachers: state.teachers.teachers,
-    isDone: state.teachers.isDone
+    houses: state.houses.houses,
+    loading: state.houses.loading,
+    students: state.students.students,
+    isDone: state.students.isDone
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddTeacher: (teacher) => dispatch(actions.addTeacher(teacher)),
-    onEditTeacher: (id, teacher) => dispatch(actions.editTeacher(id, teacher)),
-    onFetchTeachers: () => dispatch(actions.fetchTeachers())
+    onFetchHouses: () => dispatch(actions.fetchHouses()),
+    onAddStudent: (student) => dispatch(actions.addStudent(student)),
+    onEditStudent: (id, student) => dispatch(actions.editStudent(id, student)),
+    onFetchStudents: () => dispatch(actions.fetchStudents())
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withErrorHandler(TeacherForm, axios));
+)(withErrorHandler(StudentForm, axios));

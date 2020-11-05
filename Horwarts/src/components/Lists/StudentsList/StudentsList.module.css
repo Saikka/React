@@ -1,0 +1,27 @@
+.StudentsList {
+  width: 600px;
+  margin: 20px 0 0 100px;
+}
+
+.StudentsList h1 {
+  text-align: center;
+  font-family: 'HarryP';
+  font-size: 48px;
+}
+
+.StudentsList table {
+  width: 100%;
+  text-align: center;
+  margin: auto;
+}
+
+.StudentsList table,
+tr,
+td {
+  border: 2px solid #cd8727;
+  border-collapse: collapse;
+}
+
+.StudentsList td {
+  padding: 10px;
+}

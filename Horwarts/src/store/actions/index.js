@@ -7,3 +7,10 @@ export {
   editTeacher,
   deleteTeacher
 } from './teachers';
+export {
+  fetchStudents,
+  addStudent,
+  editStudent,
+  deleteStudent
+} from './students';
+export { login, authCheckState, logout } from './auth';

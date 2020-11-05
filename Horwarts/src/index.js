@@ -16,6 +16,8 @@ import newsReducer from './store/reducers/news';
 import housesReducer from './store/reducers/houses';
 import quidditchReducer from './store/reducers/quidditch';
 import teachersReducer from './store/reducers/teachers';
+import studentsReducer from './store/reducers/students';
+import authReducer from './store/reducers/auth';
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
@@ -26,7 +28,9 @@ const rootReducer = combineReducers({
   news: newsReducer,
   houses: housesReducer,
   quidditch: quidditchReducer,
-  teachers: teachersReducer
+  teachers: teachersReducer,
+  students: studentsReducer,
+  auth: authReducer
 });
 
 const store = createStore(

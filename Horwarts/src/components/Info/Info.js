@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import classes from './Info.module.css';
 import LayoutScroll from '../UI/Layouts/LayoutScroll/LayoutScroll';
 
 class Info extends Component {
   render() {
+    console.log(this.props.user);
     return (
       <LayoutScroll>
         <div className={classes.Info}>
@@ -17,7 +19,7 @@ class Info extends Component {
             <tbody>
               <tr>
                 <td>Name</td>
-                <td>Severus Snape</td>
+                <td>{this.props.user.teacher.firstname}</td>
               </tr>
               <tr>
                 <td>Subject</td>
@@ -34,4 +36,11 @@ class Info extends Component {
     );
   }
 }
-export default Info;
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.auth.user
+  };
+};
+
+export default connect(mapStateToProps)(Info);

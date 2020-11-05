@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import classes from './Header.module.css';
 import Aux from '../../../hoc/Auxillary/Auxillary';
 
-const header = () => (
+const header = (props) => (
   <Aux>
     <div className={classes.Header}>
       <h1>Hogwarts</h1>
@@ -22,11 +22,19 @@ const header = () => (
           </NavLink>
         </li>
         <li>
-          <NavLink to='/login'>Login</NavLink>
-        </li>
-        <li>
           <NavLink to='/manage'>Manage</NavLink>
         </li>
+        {!props.isAuthenticated ? (
+          <li>
+            <NavLink to='/login'>Login</NavLink>
+          </li>
+        ) : (
+          <li>
+            <NavLink exact to='/logout'>
+              Logout
+            </NavLink>
+          </li>
+        )}
       </ul>
     </div>
   </Aux>
